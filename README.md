@@ -85,4 +85,4 @@ Port: 443 => On
 
 #### NOTE
 You don't need to enable print_r $arr lines. The 'log_on' parameter will be instantly printed on your screen.
-But you can get more data with print_r $arr . example: whois ip all records.
+But you can get more data with print_r $arr . example: whois ip all records
