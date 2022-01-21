@@ -127,13 +127,15 @@ class Nm {
           print "\nCould not resolve this domain DNS!\n";
        }
        $allorr = array('type', 'ip', 'target', 'class', 'ttl', 'mname', 'rname', 'txt', 'ipv6');
-       foreach ($dnsr as $key => $value) {
-            foreach($value as $kval => $val){
-                if(in_array($kval, $allorr)){
-                    print "$val - ";
-                }
-            }
-           print "\n";
+       if(is_array($dnsr)){
+           foreach ($dnsr as $key => $value) {
+               foreach($value as $kval => $val){
+                   if(in_array($kval, $allorr)){
+                       print "$val - ";
+                   }
+               }
+               print "\n";
+           }
        }
        return $dnsr;
        // forech printf (if == log_on )
