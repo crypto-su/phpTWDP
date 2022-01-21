@@ -1,5 +1,10 @@
 #### Example test.php
 
+Default scanning ports: 
+```bash
+20,21,22,23,24,25,43,80,81,82,83,8080,443
+```
+
 ```php
 require_once __DIR__.'/src/class.nm.php';
 
@@ -18,11 +23,21 @@ $arr3 = $proc_1->portScaner(); // Port Scanner
 
 #### Console Run
 
+For default ports:
 ```bash
 sudo php test.php google.com
 'or'
 sudo php test.php 142.250.187.142
 ```
+
+For add new ports:
+
+```bash
+sudo php test.php google.com -p 2222,3306 
+'or'
+sudo php test.php 142.250.187.142 -p 2222,3306
+```
+
 
 #### Output
 Will be listed in order;

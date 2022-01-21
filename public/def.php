@@ -16,4 +16,6 @@ if (!isset($argv[1]) || $argv[1] == "-h") {
     echo "      -Example: sudo php ".$argv[0]." google.com\n";
     echo "      -Example: sudo php ".$argv[0]." 172.217.20.78\n";
     exit;
+} else if (isset($argv[2]) && $argv[2] == "-p" && isset($argv[3])) {
+    define("ports", explode(",", $argv[3]));
 }
