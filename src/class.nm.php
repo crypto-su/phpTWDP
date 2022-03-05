@@ -42,46 +42,46 @@ class Nm {
     }
 
     $hops = 32;
-    $port = 33434;  // tcp udp port traceroute servisi, unix cihazlar %99.9
+    $port = 33434;  // tcp udp port traceroute, unix device %99.9
 
 
     $ttl = 1;
     while ($ttl < $hops) {
 
-        $recv_socket = @socket_create (AF_INET, SOCK_RAW, getprotobyname ('icmp')); // icmp soketi aç
+        $recv_socket = @socket_create (AF_INET, SOCK_RAW, getprotobyname ('icmp'));
         if (!is_resource($recv_socket)) {
             echo "   Usage: sudo php ".$this->data[0]." ".$this->data[1]."\n\n";
             echo "\n";
             break;
         }
-        $send_socket = @socket_create (AF_INET, SOCK_DGRAM, getprotobyname ('udp')); // udp soketi aç
+        $send_socket = @socket_create (AF_INET, SOCK_DGRAM, getprotobyname ('udp'));
 
-        socket_set_option ($send_socket, SOL_IP, IP_TTL, $ttl); // ttl kaçıncı noktaya kadar gidebilir
-        socket_bind ($recv_socket, 0, 0); // soketi var sayılan ip ye ICMP ile bağla. icmp de port gerekmez
+        socket_set_option ($send_socket, SOL_IP, IP_TTL, $ttl);
+        socket_bind ($recv_socket, 0, 0);
 
         $time1 = microtime (true);
 
-        socket_sendto ($send_socket, "", 0, 0, $dest_addr, $port); // 0 boyutta udp paketi gönder
+        socket_sendto ($send_socket, "", 0, 0, $dest_addr, $port);
 
         $r = array ($recv_socket);
         $w = $e = array ();
-        socket_select ($r, $w, $e, 5, 0); // 5 saniye veri alamazsan paketi bırak
+        socket_select ($r, $w, $e, 5, 0);
 
         if (count ($r)) {
 
-            socket_recvfrom ($recv_socket, $buf, 512, 0, $recv_addr, $recv_port); // soketteki datadan ip kısmını al
+            socket_recvfrom ($recv_socket, $buf, 512, 0, $recv_addr, $recv_port);
 
             $time2 = microtime (true);
-            $roundtrip = ( $time2 - $time1 ) * 1000; // gidiş dönüş süresi hesapla ms
+            $roundtrip = ( $time2 - $time1 ) * 1000;
 
-            if (empty ($recv_addr)) { // ip bulamazsa * göster
+            if (empty ($recv_addr)) {
                 $recv_addr = "*";
                 $recv_name = "*";
             } else {
-                $recv_name = gethostbyaddr ($recv_addr); // bulursan host alını al. host adı ip döner bunu için ripe, afrinic, pasinic vb ne whois ip yaz
+                $recv_name = gethostbyaddr ($recv_addr);
             }
 
-            if($recv_name == $recv_addr){ $recv = '?'; } else { $recv = $recv_name; } // host adı ip ile aynı ise ? yap. whois ip yapılacak RIPE
+            if($recv_name == $recv_addr){ $recv = '?'; } else { $recv = $recv_name; }
             if($this->type == 'log_on'){
                 printf ("%3d   %-15s  %.3f ms  %s\n", $ttl, $recv_addr, $roundtrip, $recv);
             }
@@ -138,7 +138,6 @@ class Nm {
            }
        }
        return $dnsr;
-       // forech printf (if == log_on )
     }
 
   }
@@ -146,17 +145,17 @@ class Nm {
   function portScaner(){
 
     print "\nPort Scan...\n";
-    $portList = array(20,21,22,23,24,25,43,80,81,82,83,8080,443); // örnek portlar. bilinen tüm portları ekle!!!
+    $portList = array(20,21,22,23,24,25,43,80,81,82,83,8080,443);
       if (defined("ports") && count(ports) != 0){
          $portList = array_merge($portList,ports);
 
       }
       $onPortList = array();
     foreach($portList as $p => $port){
-        $connection = @fsockopen($this->getIP(), $port, $errno, $errstr, 1); // porta bakmak için soket aç
+        $connection = @fsockopen($this->getIP(), $port, $errno, $errstr, 1);
         if (is_resource($connection)){
           print "Port: $port => On\n";
-          fclose($connection); // açılan bağlantıyı kapat.
+          fclose($connection);
           $onPortList[] = $port;
         }
     }
@@ -164,7 +163,7 @@ class Nm {
 
   }
 
-  function grsCurl($gsr){ // RIPE, APNIC, ARIN, AFRINIC, LACNIC, JPIRR, RADB
+  function grsCurl($gsr){
 
     $url = "http://rest.db.ripe.net/search?source=ripe&source=apnic-grs&source=arin-grs&source=afrinic-grs&source=lacnic-grs&source=jpirr-grs&source=radb-grs&query-string=".$gsr;
     $curl = curl_init($url);
